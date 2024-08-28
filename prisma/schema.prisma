@@ -21,11 +21,14 @@ model User {
   age            Int
   email          String          @unique
   password       String
-  isAdmin        Boolean
+  isAdmin        Role            @default(BASIC)
   preferences    Json
   writtenPosts   Post[]          @relation("WrittenPosts")
   favoritePosts  Post[]          @relation("FavoritePosts")
   userPreference UserPreference?
+
+  @@unique([age, firstName, lastName])
+  @@index([email])
 }
 
 model UserPreference {
@@ -46,10 +49,17 @@ model Post {
   favoritedBy   User?      @relation("FavoritePosts", fields: [favoriteById], references: [id])
   favoriteById  String?
   category      Category[]
+
+  // @@id([title, authorId]) ==> define composite id
 }
 
 model Category {
   id    String @id @default(uuid())
   name  String @unique
   posts Post[]
+}
+
+enum Role {
+  BASIC
+  ADMIN
 }
