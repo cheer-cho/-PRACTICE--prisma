@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "dev:start": "nodemon script.ts"
+    "dev:start": "nodemon script.ts",
+    "migrate:dev": "dotenv -e .env.dev -- npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "Nutt Chokwittaya",
