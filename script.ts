@@ -4,9 +4,9 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.user.deleteMany();
-  const existedUser = await prisma.user.findUnique({ where: { email: '1@1.com' } });
-  console.log('Existed User: ', existedUser);
+  // await prisma.user.deleteMany();
+  const existedUser = await prisma.user.findMany();
+  console.log('Existed User #: ', existedUser);
 
   // create one
   // if (!existedUser) {
@@ -37,7 +37,7 @@ async function main() {
   // }
 
   // create many
-  if (!existedUser) {
+  if (existedUser.length === 0) {
     const users = await prisma.user.createMany({
       data: [
         {
@@ -222,20 +222,67 @@ async function main() {
   // });
   // console.log(users);
 
-  const user = await prisma.user.update({
+  // const user = await prisma.user.update({
+  //   where: {
+  //     email: '3@3.com',
+  //   },
+  //   data: {
+  //     age: {
+  //       increment: 2,
+  //       // decrement
+  //       // divide
+  //       // multiply
+  //     },
+  //   },
+  // });
+  // console.log(user);
+
+  const existedUserPreferences = await prisma.userPreference.findMany();
+  console.log(existedUserPreferences);
+  if (existedUserPreferences.length === 0) {
+    const userPreference = await prisma.userPreference.create({
+      data: {
+        emailUpdate: true,
+      },
+    });
+    console.log(userPreference);
+  }
+
+  // Connect existing relationship
+  const updatedUser = await prisma.user.update({
     where: {
-      email: '3@3.com',
+      id: 'e29ab63b-7ae2-42fa-aada-2a797315dee9',
     },
     data: {
-      age: {
-        increment: 2,
-        // decrement
-        // divide
-        // multiply
+      userPreference: {
+        connect: {
+          id: '5e7f2821-df5a-4075-bdf0-1c5a504bd01b',
+        },
       },
     },
   });
+
+  const user = await prisma.user.findFirst({
+    where: {
+      id: 'e29ab63b-7ae2-42fa-aada-2a797315dee9',
+    },
+    include: {
+      userPreference: true,
+    },
+  });
   console.log(user);
+
+  const updatedUser2 = await prisma.user.update({
+    where: {
+      id: 'e29ab63b-7ae2-42fa-aada-2a797315dee9',
+    },
+    data: {
+      userPreference: {
+        disconnect: true,
+      },
+    },
+  });
+  console.log(updatedUser2);
 }
 
 main()
