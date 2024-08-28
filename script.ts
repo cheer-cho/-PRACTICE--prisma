@@ -156,18 +156,49 @@ async function main() {
   // });
   // console.log(users);
 
-  const users = await prisma.user.findMany({
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     firstName: 'Jane',
+  //     age: { gte: 33 },
+  //   },
+  //   orderBy: {
+  //     age: 'desc',
+  //   },
+  //   // take: 2,
+  //   // skip: 1,
+  // });
+  // console.log(users.length);
+
+  // Query Relationship
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     userPreference: {
+  //       emailUpdate: true,
+  //     },
+  //   },
+  // });
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     writtenPosts: {
+  //       every: {
+  //         title: { startsWith: 'Test' },
+  //       },
+  //     },
+  //   },
+  // });
+  const users = await prisma.post.findMany({
     where: {
-      firstName: 'Jane',
-      age: { gte: 33 },
+      author: {
+        is: {
+          age: 33,
+        },
+        isNot: {
+          firstName: 'Jimmy',
+        },
+      },
     },
-    orderBy: {
-      age: 'desc',
-    },
-    // take: 2,
-    // skip: 1,
   });
-  console.log(users.length);
+  console.log(users);
 }
 
 main()
