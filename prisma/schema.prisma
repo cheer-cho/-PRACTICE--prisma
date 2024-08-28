@@ -17,9 +17,11 @@ datasource db {
 model User {
   id             String          @id @default(uuid())
   firstName      String
-  lastNam        String
-  email          String
+  lastName       String
+  age            Int
+  email          String          @unique
   password       String
+  isAdmin        Boolean
   preferences    Json
   writtenPosts   Post[]          @relation("WrittenPosts")
   favoritePosts  Post[]          @relation("FavoritePosts")
@@ -34,18 +36,20 @@ model UserPreference {
 }
 
 model Post {
-  id           String     @id @default(uuid())
-  rating       Float
-  createdAt    DateTime
-  updatedAt    DateTime
-  author       User       @relation("WrittenPosts", fields: [authorId], references: [id])
-  authorId     String
-  favoritedBy  User?      @relation("FavoritePosts", fields: [favoriteById], references: [id])
-  favoriteById String?
-  category     Category[]
+  id            String     @id @default(uuid())
+  title         String
+  averageRating Float
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  author        User       @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId      String
+  favoritedBy   User?      @relation("FavoritePosts", fields: [favoriteById], references: [id])
+  favoriteById  String?
+  category      Category[]
 }
 
 model Category {
   id    String @id @default(uuid())
+  name  String @unique
   posts Post[]
 }
