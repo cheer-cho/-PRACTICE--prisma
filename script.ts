@@ -66,11 +66,108 @@ async function main() {
           //   },
           // },
         },
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          age: 31,
+          email: '4@4.com',
+          password: 'password',
+          somethingJson: {},
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          age: 32,
+          email: '5@5.com',
+          password: 'password',
+          somethingJson: {},
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          age: 33,
+          email: '6@6.com',
+          password: 'password',
+          somethingJson: {},
+        },
+        {
+          firstName: 'Jane',
+          lastName: 'Doe',
+          age: 34,
+          email: '7@7.com',
+          password: 'password',
+          somethingJson: {},
+        },
       ],
     });
 
     console.log(users);
   }
+
+  // find unique
+  // const user = await prisma.user.findUnique({
+  //   where: {
+  //     email: '2@2.com',
+  //   },
+  // });
+  // console.log('Unique user by email: ', user);
+  // const user2 = await prisma.user.findUnique({
+  //   where: {
+  //     age_firstName_lastName: {
+  //       age: 30,
+  //       firstName: 'Jane',
+  //       lastName: 'Doe',
+  //     },
+  //   },
+  // });
+  // console.log('Unique user by age, first and last name: ', user2);
+
+  // find first (normal find)
+  // const user = await prisma.user.findFirst({
+  //   where: {
+  //     email: '3@3.com',
+  //   },
+  // });
+
+  // find many
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     firstName: 'Jane',
+  //   },
+  // });
+  // console.log(users);
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     firstName: 'Jane',
+  //   },
+  //   distinct: ['firstName'],
+  // });
+  // console.log(users);
+
+  // const users = await prisma.user.findMany({
+  //   where: {
+  //     firstName: 'Jane',
+  //   },
+  //   orderBy: {
+  //     age: 'desc',
+  //   },
+  //   take: 2,
+  //   skip: 1,
+  // });
+  // console.log(users);
+
+  const users = await prisma.user.findMany({
+    where: {
+      firstName: 'Jane',
+      age: { gte: 33 },
+    },
+    orderBy: {
+      age: 'desc',
+    },
+    // take: 2,
+    // skip: 1,
+  });
+  console.log(users.length);
 }
 
 main()
